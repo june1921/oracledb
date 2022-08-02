@@ -1,4 +1,5 @@
 레코드 관련 정리
+```
 /* RECORD를 삽입할 테이블 생성 */
 CREATE TABLE DEPT_RECORD
 AS SELECT * FROM DEPT;
@@ -43,3 +44,4 @@ END;
 
 /* UPDATE된 테이블 조회 */
 SELECT * FROM DEPT_RECORD;
+```
