@@ -251,4 +251,101 @@ EXCEPTION
     WHEN VALUE_ERROR THEN
         DBMS_OUTPUT.PUT_LINE('예외 처리: 수치 또는 값 오류 발생');
 END;
+
+/* 패키지 바디 */
+CREATE OR REPLACE PACKAGE BODY pkg_example
+IS
+    body_no NUMBER := 10;
+    
+    FUNCTION func_aftertax(sal NUMBER) RETURN NUMBER
+        IS
+            tax NUMBER := 0.05;
+        BEGIN
+            RETURN (ROUND(sal - (sal * tax)));
+    END func_aftertax;
+    
+    PROCEDURE pro_emp(in_empno IN EMP.EMPNO%TYPE)
+        IS
+            out_ename EMP.ENAME%TYPE;
+            out_sal EMP.SAL%TYPE;
+        BEGIN
+            SELECT ENAME, SAL INTO out_ename, out_sal
+              FROM EMP
+             WHERE EMPNO = in_empno;
+             
+            DBMS_OUTPUT.PUT_LINE('ENAME: ' || out_ename);
+            DBMS_OUTPUT.PUT_LINE('SAL: ' || out_sal);
+            
+    END pro_emp;
+    
+    PROCEDURE pro_dept(in_deptno IN DEPT.DEPTNO%TYPE)
+        IS
+            out_dname DEPT.DNAME%TYPE;
+            out_loc DEPT.LOC%TYPE;
+        BEGIN
+            SELECT DNAME, LOC INTO out_dname, out_loc
+              FROM DEPT
+             WHERE DEPTNO = in_deptno;
+             
+            DBMS_OUTPUT.PUT_LINE('DNAME: ' || out_dname);
+            DBMS_OUTPUT.PUT_LINE('LOC: ' || out_loc);
+            
+    END pro_dept;
+    
+END;
+
+/* 패키지 오버로드 */
+/* 패키지 바디 */
+CREATE OR REPLACE PACKAGE BODY pkg_overload
+IS
+
+    PROCEDURE pro_emp(in_empno IN EMP.EMPNO%TYPE)
+        IS
+            out_ename EMP.ENAME%TYPE;
+            out_sal EMP.SAL%TYPE;
+        BEGIN
+            SELECT ENAME, SAL INTO out_ename, out_sal
+              FROM EMP
+             WHERE EMPNO = in_empno;
+             
+            DBMS_OUTPUT.PUT_LINE('ENAME: ' || out_ename);
+            DBMS_OUTPUT.PUT_LINE('SAL: ' || out_sal);
+            
+    END pro_emp;
+    
+    PROCEDURE pro_emp(in_ename IN EMP.ENAME%TYPE)
+        IS
+            out_ename EMP.ENAME%TYPE;
+            out_sal EMP.SAL%TYPE;
+        BEGIN
+            SELECT ENAME, SAL INTO out_ename, out_sal
+              FROM EMP
+             WHERE ENAME = in_ename;
+             
+            DBMS_OUTPUT.PUT_LINE('ENAME: ' || out_ename);
+            DBMS_OUTPUT.PUT_LINE('SAL: ' || out_sal);
+            
+    END pro_emp;
+    
+    
+END;
+
+/* 함수, 프로시저, 함수 오버로드 확인 */
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('--pkg_example.func_aftertax(3000)--');
+    DBMS_OUTPUT.PUT_LINE('after-tax: '|| pkg_example.func_aftertax(3000));
+    
+    DBMS_OUTPUT.PUT_LINE('--pkg_example.pro_emp(7788)--');
+    pkg_example.pro_emp(7788);
+    
+    DBMS_OUTPUT.PUT_LINE('--pkg_example.pro_emp(7788)--');
+    pkg_example.pro_dept(10);
+    
+    DBMS_OUTPUT.PUT_LINE('--pkg_example.pro_emp(7788)--');
+    pkg_overload.pro_emp(7788);
+    
+    DBMS_OUTPUT.PUT_LINE('--pkg_example.pro_emp(''SCOTT'')--');
+    pkg_overload.pro_emp('SCOTT');
+    
+END;
 ```
