@@ -59,6 +59,29 @@ BEGIN
 -- FOR문과 Cursor가 같이사용될 때는
     FOR emp_rec IN emp_cur LOOP -- 명시적 커서의 OPEN,FETCH가 자동으로 수행
         DBMS_OUTPUT.PUT_LINE(emp_rec.employee_id||' '||emp_rec.last_name);
-    END LOOP; -- 루프문 빠져나갈 때 자동적으로 커서가 종료됨
+    END LOOP; -- 루프문 빠져나갈 때 자동적으로 커서가 CLOSE됨
 END;
+```
+### 커서변수
+커서를 변수처럼 사용하여 재사용이 가능하도록 하는 것.  
+강한 변수 타입(int, char과 같은)은 return 타입을 정의  
+약한 변수 타입(javascript의 var와 같은)은 return 타입을 생략한다.  
+이하는 커서변수 선언 문법이다.
+```
+TYPE 커서_타입명 IS REF CURSOR [ RETURN 반환타입 ];
+커서_변수명 커서_타입명;
+```
+이하는 '강한 커서타입' 선언 예시
+```
+TYPE dep_curtype IS REF CURSOR RETURN department%ROWTYPE;
+dep_curvar dep_curtype
+```
+이하는 '약한 커서타입' 선언 예시
+```
+TYPE dep_curtype IS REF CURSOR;
+dep_curvar dep_curtype;
+```
+약결합일때는 SYS_REFCURSOR을 사용하면 굳이 두 줄을 사용할 필요없이 간략하게 사용이 가능하다.
+```
+dep_curvar SYS_REFCURSOR;
 ```
