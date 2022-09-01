@@ -50,3 +50,15 @@ BEGIN
 END;
 
 ```
+다음과 같이 FOR LOOP 문을 사용하면 OPEN, FETCH CLOSE 자동으로 한다.
+```
+DECLARE
+CURSOR emp_cur IS
+    select employee_id, last_name from employees;
+BEGIN
+-- FOR문과 Cursor가 같이사용될 때는
+    FOR emp_rec IN emp_cur LOOP -- 명시적 커서의 OPEN,FETCH가 자동으로 수행
+        DBMS_OUTPUT.PUT_LINE(emp_rec.employee_id||' '||emp_rec.last_name);
+    END LOOP; -- 루프문 빠져나갈 때 자동적으로 커서가 종료됨
+END;
+```
