@@ -85,3 +85,11 @@ dep_curvar dep_curtype;
 ```
 dep_curvar SYS_REFCURSOR;
 ```
+### 커서 표현식
+SELECT문에서 컬럼 형태로 커서를 사용 하는 것.  
+아래와 같이 사용한다.
+```
+CURSOR( 서브쿼리 )
+```
+일반적으로 다중행이 리턴되는 쿼리를 select 문에 사용할 경우 ORA-01427 오류를 낸다.  
+그렇지만 cursor를 사용하면 해당 row가 출력되는 다중행을 '가리키도록' 하여 출력이 가능함.  
